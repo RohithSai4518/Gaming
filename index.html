@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chamber Crawler - 2D Action Rogue Engine</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Main Game Rendering Canvas -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Mini-Map HUD Overlay -->
+        <canvas id="minimapCanvas" width="160" height="160"></canvas>
+
+        <!-- Top HUD Bar -->
+        <div id="hud-top" class="hud-layer">
+            <div class="hud-stats-group">
+                <div class="bar-container health-bar-container">
+                    <span class="bar-label">HP</span>
+                    <div class="bar-fill" id="hp-fill"></div>
+                    <span class="bar-text" id="hp-text">100 / 100</span>
+                </div>
+                <div class="bar-container energy-bar-container">
+                    <span class="bar-label">NRG</span>
+                    <div class="bar-fill" id="energy-fill"></div>
+                    <span class="bar-text" id="energy-text">50 / 50</span>
+                </div>
+            </div>
+
+            <div class="hud-center-group">
+                <div class="hud-pill" id="dungeon-depth">Floor 1</div>
+                <div class="hud-pill" id="score-display">Score: 0</div>
+            </div>
+
+            <div class="hud-right-group">
+                <div class="gold-counter">
+                    <span class="gold-icon">🪙</span>
+                    <span id="gold-text">0</span>
+                </div>
+                <div class="weapon-indicator" id="weapon-display">
+                    <span id="weapon-icon">🔫</span>
+                    <span id="weapon-name">Blaster</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boss Health Bar (Hidden until boss encounter) -->
+        <div id="boss-hud" class="hud-layer hidden">
+            <div class="boss-title" id="boss-name">Dungeon Overlord</div>
+            <div class="boss-bar-container">
+                <div class="boss-bar-fill" id="boss-hp-fill"></div>
+            </div>
+        </div>
+
+        <!-- Touch Controls for Mobile/Tablets -->
+        <div id="touch-controls" class="hud-layer touch-only">
+            <div id="joystick-zone">
+                <div id="joystick-base">
+                    <div id="joystick-stick"></div>
+                </div>
+            </div>
+            <div id="action-buttons">
+                <button id="btn-dash" class="touch-btn">DASH</button>
+                <button id="btn-fire" class="touch-btn">FIRE</button>
+                <button id="btn-swap" class="touch-btn">SWAP</button>
+            </div>
+        </div>
+
+        <!-- Menus and Overlays -->
+        <div id="menu-overlay" class="menu-backdrop">
+            <!-- Start Menu Screen -->
+            <div id="start-screen" class="menu-card">
+                <h1 class="game-title">CHAMBER CRAWLER</h1>
+                <p class="game-subtitle">Zero-Dependency 2D Action Rogue Engine</p>
+                <div class="menu-divider"></div>
+                <button id="btn-start" class="btn-primary">START EXPEDITION</button>
+                <button id="btn-controls" class="btn-secondary">CONTROLS & HOW TO PLAY</button>
+                <button id="btn-audio-toggle" class="btn-secondary">SOUND: ON</button>
+                <div class="version-tag">Version 1.0.0 • Pure Vanilla JS & Web Audio</div>
+            </div>
+
+            <!-- Controls Screen -->
+            <div id="controls-screen" class="menu-card hidden">
+                <h2>CONTROLS & MECHANICS</h2>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <span class="key-badge">W A S D / Arrows</span>
+                        <span class="control-desc">Move Explorer</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key-badge">Mouse Aim + Left Click</span>
+                        <span class="control-desc">Aim & Fire Weapon</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key-badge">Spacebar / Right Click</span>
+                        <span class="control-desc">Dash / Evade</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key-badge">1, 2, 3 / Q</span>
+                        <span class="control-desc">Switch Weapons</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key-badge">E</span>
+                        <span class="control-desc">Interact / Descend Stairs</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key-badge">P / ESC</span>
+                        <span class="control-desc">Pause Game</span>
+                    </div>
+                </div>
+                <button id="btn-controls-back" class="btn-secondary">BACK TO MENU</button>
+            </div>
+
+            <!-- Pause Screen -->
+            <div id="pause-screen" class="menu-card hidden">
+                <h2>GAME PAUSED</h2>
+                <div class="menu-divider"></div>
+                <button id="btn-resume" class="btn-primary">RESUME</button>
+                <button id="btn-restart" class="btn-secondary">RESTART RUN</button>
+                <button id="btn-quit" class="btn-danger">QUIT TO MAIN MENU</button>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div id="gameover-screen" class="menu-card hidden">
+                <h1 class="defeat-title">EXPEDITION FAILED</h1>
+                <p id="gameover-stats">Floors Cleared: 0 • Enemies Defeated: 0 • Score: 0</p>
+                <div class="menu-divider"></div>
+                <button id="btn-retry" class="btn-primary">TRY AGAIN</button>
+                <button id="btn-gameover-menu" class="btn-secondary">MAIN MENU</button>
+            </div>
+
+            <!-- Victory Screen -->
+            <div id="victory-screen" class="menu-card hidden">
+                <h1 class="victory-title">DUNGEON CONQUERED!</h1>
+                <p id="victory-stats">You defeated the Dungeon Overlord and escaped!</p>
+                <div class="menu-divider"></div>
+                <button id="btn-victory-retry" class="btn-primary">PLAY AGAIN</button>
+                <button id="btn-victory-menu" class="btn-secondary">MAIN MENU</button>
+            </div>
+        </div>
+
+        <!-- Floating Notifications Container -->
+        <div id="notifications"></div>
+    </div>
+
+    <!-- Modular Game Script Hierarchy -->
+    <script src="js/math/vec2.js"></script>
+    <script src="js/math/collision.js"></script>
+    <script src="js/core/time.js"></script>
+    <script src="js/core/input.js"></script>
+    <script src="js/core/audio.js"></script>
+    <script src="js/data/items_db.js"></script>
+    <script src="js/data/bestiary_db.js"></script>
+    <script src="js/data/skills_db.js"></script>
+    <script src="js/data/quests_db.js"></script>
+    <script src="js/data/world_lore_db.js"></script>
+    <script src="js/data/spells_db.js"></script>
+    <script src="js/systems/inventory_system.js"></script>
+    <script src="js/systems/quest_system.js"></script>
+    <script src="js/systems/skill_system.js"></script>
+    <script src="js/systems/dialogue_system.js"></script>
+    <script src="js/systems/weather_system.js"></script>
+    <script src="js/systems/save_system.js"></script>
+    <script src="js/world/camera.js"></script>
+    <script src="js/world/tilemap.js"></script>
+    <script src="js/world/dungeon_gen.js"></script>
+    <script src="js/entities/particle.js"></script>
+    <script src="js/entities/entity.js"></script>
+    <script src="js/entities/projectile.js"></script>
+    <script src="js/entities/item.js"></script>
+    <script src="js/entities/player.js"></script>
+    <script src="js/entities/enemy.js"></script>
+    <script src="js/ui/hud.js"></script>
+    <script src="js/ui/menu.js"></script>
+    <script src="js/core/engine.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

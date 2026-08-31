@@ -1,0 +1,27 @@
+{
+  "name": "chamber-crawler-game",
+  "version": "1.0.0",
+  "description": "A responsive, zero-dependency 2D action rogue-lite game engine built from scratch with Vanilla JavaScript, HTML5 Canvas, and Web Audio API.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node -e \"console.log('Build completed successfully. Zero compilation required for vanilla web assets.')\"",
+    "test": "node tests/test_runner.js"
+  },
+  "keywords": [
+    "game-development",
+    "roguelike",
+    "html5-canvas",
+    "web-audio-api",
+    "2d-engine"
+  ],
+  "author": "Chamber Crawler Development Team",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
